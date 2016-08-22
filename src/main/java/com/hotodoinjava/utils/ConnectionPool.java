@@ -6,47 +6,64 @@ import java.sql.SQLException;
 
 
 public class ConnectionPool {
+
+	private String llegoAdb;
 	
-public void conect(){
-	System.out.println("-------- PostgreSQL "
+	public String getLlegoAdb() {
+		return llegoAdb;
+	}
+
+	public void setLlegoAdb(String llegoAdb) {
+		this.llegoAdb = llegoAdb;
+	}
+
+	public ConnectionPool(){
+		llegoAdb = "";
+	}
+	
+	
+	/**
+	 * Metodo de conexion
+	 */
+   public  String conect(){
+	System.out.println("-------- MySQL "
 			+ "JDBC Connection Testing ------------");
 
 	try {
+		 String driver = "com.mysql.jdbc.Driver";
+	    String connectionString = "jdbc:mysql://localhost:3306/loreirodb";
+	    String user = "root";
+	    String password = "tech1234";
+	    
+		Class.forName(driver);
+		
+	    Connection con = DriverManager.getConnection(connectionString, user, password);
+		
+	    if (!con.isClosed()) {
+	    	System.out.println("Connection OPEN:"+con.toString());
+	    	setLlegoAdb(user);
+	      con.close();
+	      System.out.println("Connection CLOSE:"+con.toString());
+	    }
 
-		Class.forName("org.postgresql.Driver");
-
-	} catch (ClassNotFoundException e) {
-
-		System.out.println("Where is your PostgreSQL JDBC Driver? "
-				+ "Include in your library path!");
-		e.printStackTrace();
-		return;
-
-	}
-
-	System.out.println("PostgreSQL JDBC Driver Registered!");
-
-	Connection connection = null;
-
-	try {
-
-		connection = DriverManager.getConnection(
-				"jdbc:postgresql://127.0.0.1:5432/testdb", "mkyong",
-				"admin");
-
+	    return con.getCatalog();
 	} catch (SQLException e) {
 
 		System.out.println("Connection Failed! Check output console");
 		e.printStackTrace();
-		return;
+		return e.getMessage();
 
+	} catch (ClassNotFoundException e) {
+		
+		e.printStackTrace();
 	}
+	
+	return llegoAdb;
 
-	if (connection != null) {
-		System.out.println("You made it, take control your database now!");
-	} else {
-		System.out.println("Failed to make connection!");
-	}
 
-}
+   }
+   
+//   public static void main(String[] args){
+//	   conect();
+//   }
 }
