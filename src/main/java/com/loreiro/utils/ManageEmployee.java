@@ -1,13 +1,12 @@
 package com.loreiro.utils;
 
-import java.util.List; 
-import java.util.Date;
-import java.util.Iterator; 
+import java.util.Iterator;
+import java.util.List;
 
-import org.hibernate.HibernateException; 
-import org.hibernate.Session; 
-import org.hibernate.Transaction;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
 import com.loreiro.model.Employee;
@@ -23,33 +22,34 @@ public class ManageEmployee {
          System.err.println("Failed to create sessionFactory object." + ex);
          throw new ExceptionInInitializerError(ex); 
       }
+      
       ManageEmployee ME = new ManageEmployee();
 
-      /* Add few employee records in database */
+      /* Add few Usuario records in database */
       Integer empID1 = ME.addEmployee("Zara", "Ali", 1000);
       Integer empID2 = ME.addEmployee("Daisy", "Das", 5000);
       Integer empID3 = ME.addEmployee("John", "Paul", 10000);
 
-      /* List down all the employees */
-      ME.listEmployees();
+      /* List down all the Usuarios */
+      ME.listEmpployee();
 
-      /* Update employee's records */
+      /* Update Usuario's records */
       ME.updateEmployee(empID1, 5000);
 
-      /* Delete an employee from the database */
+      /* Delete an Usuario from the database */
       ME.deleteEmployee(empID2);
 
-      /* List down new list of the employees */
-      ME.listEmployees();
+      /* List down new list of the Usuarios */
+      ME.listEmpployee();
    }
-   /* Method to CREATE an employee in the database */
+   /* Method to CREATE an Usuario in the database */
    public Integer addEmployee(String fname, String lname, int salary){
       Session session = factory.openSession();
       Transaction tx = null;
       Integer employeeID = null;
       try{
          tx = session.beginTransaction();
-         Employee employee = new Employee(fname, lname, salary);
+         Employee employee= new Employee(fname, lname, salary);
          employeeID = (Integer) session.save(employee); 
          tx.commit();
       }catch (HibernateException e) {
@@ -60,16 +60,16 @@ public class ManageEmployee {
       }
       return employeeID;
    }
-   /* Method to  READ all the employees */
-   public void listEmployees( ){
+   /* Method to  READ all the Usuarios */
+   public void listEmpployee( ){
       Session session = factory.openSession();
       Transaction tx = null;
       try{
          tx = session.beginTransaction();
-         List employees = session.createQuery("FROM Employee").list(); 
+         List Usuarios = session.createQuery("FROM Usuario").list(); 
          for (Iterator iterator = 
-                           employees.iterator(); iterator.hasNext();){
-            Employee employee = (Employee) iterator.next(); 
+                           Usuarios.iterator(); iterator.hasNext();){
+        	 Employee employee= (Employee) iterator.next(); 
             System.out.print("First Name: " + employee.getFirstName()); 
             System.out.print("  Last Name: " + employee.getLastName()); 
             System.out.println("  Salary: " + employee.getSalary()); 
@@ -82,14 +82,14 @@ public class ManageEmployee {
          session.close(); 
       }
    }
-   /* Method to UPDATE salary for an employee */
-   public void updateEmployee(Integer EmployeeID, int salary ){
+   /* Method to UPDATE salary for an Usuario */
+   public void updateEmployee(Integer employeeID, int salary ){
       Session session = factory.openSession();
       Transaction tx = null;
       try{
          tx = session.beginTransaction();
          Employee employee = 
-                    (Employee)session.get(Employee.class, EmployeeID); 
+                    (Employee)session.get(Employee.class, employeeID); 
          employee.setSalary( salary );
 		 session.update(employee); 
          tx.commit();
@@ -100,14 +100,14 @@ public class ManageEmployee {
          session.close(); 
       }
    }
-   /* Method to DELETE an employee from the records */
-   public void deleteEmployee(Integer EmployeeID){
+   /* Method to DELETE an Usuario from the records */
+   public void deleteEmployee(Integer employeeID){
       Session session = factory.openSession();
       Transaction tx = null;
       try{
          tx = session.beginTransaction();
          Employee employee = 
-                   (Employee)session.get(Employee.class, EmployeeID); 
+                   (Employee)session.get(Employee.class, employeeID); 
          session.delete(employee); 
          tx.commit();
       }catch (HibernateException e) {
